@@ -1,27 +1,75 @@
-import React from "react";
-
-//include images into your bundle
-import rigoImage from "../../img/rigo-baby.jpg";
+import React, { useState } from "react";
 
 //create your first component
 const Home = () => {
-	return (
-		<div className="text-center">
-            
+	// we define the state for a single task and a task list
+	const [task, setTask] = useState("")
+	const [taskList, setTaskList] = useState([])
 
-			<h1 className="text-center mt-5">Hello Rigo!</h1>
-			<p>
-				<img src={rigoImage} />
-			</p>
-			<a href="#" className="btn btn-success">
-				If you see this green button... bootstrap is working...
-			</a>
-			<p>
-				Made by{" "}
-				<a href="http://www.4geeksacademy.com">4Geeks Academy</a>, with
-				love!
-			</p>
-		</div>
+	const handleChange = (e) => {
+		if (task.trim() == "") {
+			return
+		}
+		setTaskList([...taskList, task])
+		setTask("")
+	}
+
+	const handleKey = (e) => {
+		if (e.key == "Enter") {
+			handleChange();
+		}
+	};
+
+	const deleteTask = (indexTask) => {
+		setTaskList(
+			taskList.filter((task, index) => index !== indexTask)
+		)
+	}
+
+
+	return (
+		<section className="vh-100">
+			<div className="container py-5">
+				<div className="input-group mb-3">
+					<input
+						type="text"
+						className="form-control"
+						placeholder="New Task"
+						value={task}
+						name="inputTask"
+						onChange={(e) => setTask(e.target.value)}
+						onKeyDown={handleKey}
+					/>
+
+					<button
+						className="btn btn-outline-secondary"
+						type="button"
+						onClick={handleChange}
+					>
+						Add
+					</button>
+				</div>
+
+				<div className="container py-3">
+					{taskList.map((task, index) => (
+						<div
+							key={index}
+							className="container d-flex justify-content-between align-items-center mb-2"
+						>
+							<p className="m-0">{task}</p>
+							<button 
+								type="button" 
+								className="btn btn-warning"
+								onClick={()=> deleteTask(index)}
+							>
+								X
+							</button>
+						</div>
+					))}
+				</div>
+
+			</div>
+		</section>
 	);
 };
 
